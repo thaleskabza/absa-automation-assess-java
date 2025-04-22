@@ -1,3 +1,16 @@
+file://<WORKSPACE>/src/test/java/com/absa/api/PetfinderRealTest.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 624
+uri: file://<WORKSPACE>/src/test/java/com/absa/api/PetfinderRealTest.java
+text:
+```scala
 package com.absa.api;
 
 import static org.hamcrest.Matchers.greaterThan;
@@ -14,13 +27,12 @@ public class PetfinderRealTest {
     @BeforeAll
     public static void fetchToken() {
         
-  
-      String CLIENT_ID     = "1yIxd8HkNjV4ymqLi2GhaFFYOps9SrpEeT0cUWSSWwDAVHKxeF" ;
-      String CLIENT_SECRET = "kih7OW7Q3yGiVK4i7Y33hEwsS24eEWRyiN6gaNMt";
+        String CLIENT_ID     = "gbfuckDsPVmzzxskuQpgdeQ5tvZYX6NTa9vFszNJLkg8oTeQOK";
+        String CLIENT_SECRET = "Y0E5cR6pNrzJinSZuvFlSVDws5NZINH4OdkJtK0d";
 
         TOKEN =
           given()
-            .contentType("application/x-www-form-urlencoded")
+            .contentType("application/x-www-form-urlencod@@ed")
             .formParam("grant_type",    "client_credentials")
             .formParam("client_id",     CLIENT_ID)
             .formParam("client_secret", CLIENT_SECRET)
@@ -65,3 +77,25 @@ public class PetfinderRealTest {
           .body("animals.size()", greaterThan(0));
     }
 }
+
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.HoverProvider$.hover(HoverProvider.scala:40)
+	dotty.tools.pc.ScalaPresentationCompiler.hover$$anonfun$1(ScalaPresentationCompiler.scala:389)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator

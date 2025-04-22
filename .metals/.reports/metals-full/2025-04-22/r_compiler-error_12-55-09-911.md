@@ -1,3 +1,16 @@
+file://<WORKSPACE>/src/test/java/com/absa/api/PetfinderRealTest.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 486
+uri: file://<WORKSPACE>/src/test/java/com/absa/api/PetfinderRealTest.java
+text:
+```scala
 package com.absa.api;
 
 import static org.hamcrest.Matchers.greaterThan;
@@ -15,8 +28,8 @@ public class PetfinderRealTest {
     public static void fetchToken() {
         
   
-      String CLIENT_ID     = "1yIxd8HkNjV4ymqLi2GhaFFYOps9SrpEeT0cUWSSWwDAVHKxeF" ;
-      String CLIENT_SECRET = "kih7OW7Q3yGiVK4i7Y33hEwsS24eEWRyiN6gaNMt";
+      String CLIENT_ID     = secrets.CLIENT_ID//"gbfuckDsPVmzzxskuQpgdeQ5tvZYX6NTa9vFszNJLkg8oTeQOK"
+      stri@@ CLIENT_SECRET = secrets.CLIENT_SECRET//"Y0E5cR6pNrzJinSZuvFlSVDws5NZINH4OdkJtK0d"
 
         TOKEN =
           given()
@@ -65,3 +78,25 @@ public class PetfinderRealTest {
           .body("animals.size()", greaterThan(0));
     }
 }
+
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.completions.CompletionProvider.completions(CompletionProvider.scala:72)
+	dotty.tools.pc.ScalaPresentationCompiler.complete$$anonfun$1(ScalaPresentationCompiler.scala:150)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator

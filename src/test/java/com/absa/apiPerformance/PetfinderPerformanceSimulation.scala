@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 class PetfinderPerformanceSimulation extends Simulation {
 
   
-  val CLIENT_ID     = "gbfuckDsPVmzzxskuQpgdeQ5tvZYX6NTa9vFszNJLkg8oTeQOK"
+  val CLIENT_ID     = "1yIxd8HkNjV4ymqLi2GhaFFYOps9SrpEeT0cUWSSWwDAVHKxeF"
   val CLIENT_SECRET = "Y0E5cR6pNrzJinSZuvFlSVDws5NZINH4OdkJtK0d"
 
   // HTTP configuration

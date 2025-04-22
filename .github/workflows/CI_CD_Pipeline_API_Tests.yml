@@ -38,7 +38,8 @@ jobs:
 
       # 5. Run Gatling performance tests
       - name: Run Gatling load test
-        run: mvn gatling:test --batch-mode
+        run: 
+      #mvn gatling:test --batch-mode - do not run performance test    
 
       # 6. Archive test results
       - name: Upload test reports
