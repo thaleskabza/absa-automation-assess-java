@@ -124,9 +124,6 @@ mvn test -Dtestng.groups=ui
 ## 7. Reports
 
 
-3 scenarios (3 passed)
-10 steps (10 passed)
-0m13.835s (executing steps: 0m13.804s)
 ┌──────────────────────────────────────────────────────────────────────────┐
 │ View your Cucumber Report at:                                            │
 │ https://reports.cucumber.io/reports/30e8334c-38a8-40d6-8805-8ac323b0121f │
