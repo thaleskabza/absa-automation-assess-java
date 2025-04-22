@@ -1,0 +1,6 @@
+com/absa/models/UserData.class
+com/absa/pages/BasePage.class
+com/absa/utils/TestDataUtil.class
+com/absa/pages/WebTablesPage.class
+com/absa/runners/TestRunner.class
+com/absa/stepdefinitions/steps.class

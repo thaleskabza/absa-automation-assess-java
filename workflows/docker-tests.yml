@@ -1,0 +1,127 @@
+name: Matrix Dockerized Test Execution
+'on':
+  schedule:
+    - cron: 30 6 * * *
+  push:
+    branches:
+      - main
+      - master
+      - dev
+      - feature
+  pull_request:
+    branches:
+      - main
+      - master
+      - dev
+      - feature
+jobs:
+  matrix-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - browser: chrome
+            version: '108'
+          - browser: chrome
+            version: '107'
+          - browser: chrome
+            version: '106'
+          - browser: chrome
+            version: '105'
+          - browser: chrome
+            version: '104'
+          - browser: chrome
+            version: '103'
+          - browser: firefox
+            version: '107'
+          - browser: firefox
+            version: '106'
+          - browser: firefox
+            version: '105'
+          - browser: firefox
+            version: '104'
+          - browser: firefox
+            version: '103'
+          - browser: safari
+            version: '15'
+          - browser: safari
+            version: '14'
+          - browser: safari
+            version: '13'
+          - browser: edge
+            version: '108'
+          - browser: edge
+            version: '107'
+          - browser: edge
+            version: '106'
+          - browser: opera
+            version: '80'
+          - browser: opera
+            version: '79'
+          - browser: opera
+            version: '78'
+    
+    env:
+      SELENIUM_HUB_URL: 'http://selenium-hub:4444/wd/hub'
+      BROWSER_NAME: '${{ matrix.config.browser }}'
+      BROWSER_VERSION: '${{ matrix.config.version }}'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.1.0
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: '${{ runner.os }}-buildx-${{ github.sha }}'
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Start Selenium Grid
+        run: >
+          # Start only the grid services.
+
+          # For a large matrix, consider using a Selenium Grid that scales
+          dynamically or a cloud-based grid service.
+
+          docker compose -f docker-compose.yml up -d --build
+
+          docker compose ps
+      - name: Run tests in Docker container
+        run: >
+          # Pass the browser settings via JVM system properties or environment
+          variables.
+
+          docker compose run --rm test-runner mvn test
+          -DBROWSER_NAME=${BROWSER_NAME} -DBROWSER_VERSION=${BROWSER_VERSION}
+      - name: Capture logs on failure
+        if: failure()
+        run: >
+          docker compose logs selenium-hub > selenium-hub_${{
+          matrix.config.browser }}_${{ matrix.config.version }}.log
+
+          docker compose logs chrome >> chrome_${{ matrix.config.browser }}_${{
+          matrix.config.version }}.log
+
+          docker compose logs firefox >> firefox_${{ matrix.config.browser
+          }}_${{ matrix.config.version }}.log
+
+          docker compose logs mysql > mysql_${{ matrix.config.browser }}_${{
+          matrix.config.version }}.log
+
+          docker compose logs test-runner > test-runner_${{
+          matrix.config.browser }}_${{ matrix.config.version }}.log
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: >-
+            test-reports-${{ matrix.config.browser }}-${{ matrix.config.version
+            }}
+          path: |
+            target/cucumber-reports/
+            target/surefire-reports/
+            test-output/
+      - name: Stop Selenium Grid
+        if: always()
+        run: docker compose down -v

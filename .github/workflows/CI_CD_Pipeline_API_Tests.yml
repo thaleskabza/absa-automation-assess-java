@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Java (Temurin 17)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      # 3. (Optional) Cache Maven Local Repository
+      - name: Cache Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # 4. Build & run Rest Assured tests
+      - name: Run unit & integration tests
+        run: mvn test --batch-mode
+
+      # 5. Run Gatling performance tests
+      - name: Run Gatling load test
+        run: mvn gatling:test --batch-mode
+
+      # 6. Archive test results
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            target/surefire-reports
+            target/gatling/*/js
+            target/gatling/*/html
