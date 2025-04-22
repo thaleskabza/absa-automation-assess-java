@@ -1,32 +1,39 @@
+file://<WORKSPACE>/src/test/java/com/absa/stepdefinitions/steps.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+uri: file://<WORKSPACE>/src/test/java/com/absa/stepdefinitions/steps.java
+text:
+```scala
+//src/test/java/com/absa/stepdefinitions/steps.java
 package com.absa.stepdefinitions;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.*;
+import io.cucumber.datatable.DataTable;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 
-import com.absa.models.UserData;
 import com.absa.pages.WebTablesPage;
+import com.absa.models.UserData;
 import com.absa.utils.TestDataUtil;
-
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 
 public class steps {
     private WebDriver driver;
@@ -190,3 +197,29 @@ public class steps {
         Thread.sleep(60000);
     }
 }
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.WithCompilationUnit.<init>(WithCompilationUnit.scala:31)
+	dotty.tools.pc.SimpleCollector.<init>(PcCollector.scala:351)
+	dotty.tools.pc.PcSemanticTokensProvider$Collector$.<init>(PcSemanticTokensProvider.scala:63)
+	dotty.tools.pc.PcSemanticTokensProvider.Collector$lzyINIT1(PcSemanticTokensProvider.scala:63)
+	dotty.tools.pc.PcSemanticTokensProvider.Collector(PcSemanticTokensProvider.scala:63)
+	dotty.tools.pc.PcSemanticTokensProvider.provide(PcSemanticTokensProvider.scala:88)
+	dotty.tools.pc.ScalaPresentationCompiler.semanticTokens$$anonfun$1(ScalaPresentationCompiler.scala:111)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator

@@ -1,4 +1,3 @@
-// src/test/java/com/absa/pages/BasePage.java
 package com.absa.pages;
 
 import org.openqa.selenium.WebDriver;

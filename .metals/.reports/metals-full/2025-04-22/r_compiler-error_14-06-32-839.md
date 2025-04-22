@@ -1,11 +1,24 @@
+file://<WORKSPACE>/src/test/java/com/absa/utils/TestDataUtil.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 88
+uri: file://<WORKSPACE>/src/test/java/com/absa/utils/TestDataUtil.java
+text:
+```scala
+// src/test/java/com/absa/utils/TestDataUtil.java
 package com.absa.utils;
 
+import com.ab@@sa.models.UserData;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.absa.models.UserData;
 
 public class TestDataUtil {
     private static UserData latestUser;
@@ -44,3 +57,25 @@ public class TestDataUtil {
         return latestUser;
     }
 }
+
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.HoverProvider$.hover(HoverProvider.scala:40)
+	dotty.tools.pc.ScalaPresentationCompiler.hover$$anonfun$1(ScalaPresentationCompiler.scala:389)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator

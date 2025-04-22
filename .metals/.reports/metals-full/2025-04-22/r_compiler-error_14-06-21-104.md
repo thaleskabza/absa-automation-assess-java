@@ -1,3 +1,16 @@
+file://<WORKSPACE>/src/test/java/com/absa/stepdefinitions/steps.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 2772
+uri: file://<WORKSPACE>/src/test/java/com/absa/stepdefinitions/steps.java
+text:
+```scala
 package com.absa.stepdefinitions;
 
 import java.net.URL;
@@ -76,7 +89,7 @@ public class steps {
                 scenario.log("Failed to capture screenshot: " + e.getMessage());
             }
         }
-
+@@
     @Given("User navigate to {string}")
     public void i_navigate_to(String url) throws InterruptedException {
         driver.get(url);
@@ -190,3 +203,24 @@ public class steps {
         Thread.sleep(60000);
     }
 }
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.HoverProvider$.hover(HoverProvider.scala:40)
+	dotty.tools.pc.ScalaPresentationCompiler.hover$$anonfun$1(ScalaPresentationCompiler.scala:389)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator

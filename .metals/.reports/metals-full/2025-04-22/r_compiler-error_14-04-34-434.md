@@ -1,3 +1,17 @@
+file://<WORKSPACE>/src/test/java/com/absa/pages/WebTablesPage.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 424
+uri: file://<WORKSPACE>/src/test/java/com/absa/pages/WebTablesPage.java
+text:
+```scala
+// src/test/java/com/absa/pages/WebTablesPage.java
 package com.absa.pages;
 
 import java.util.List;
@@ -10,7 +24,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.Select;
-
+@@
 import com.absa.models.UserData;
 
 public class WebTablesPage extends BasePage {
@@ -154,3 +168,24 @@ public class WebTablesPage extends BasePage {
         }
     }
 }
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.HoverProvider$.hover(HoverProvider.scala:40)
+	dotty.tools.pc.ScalaPresentationCompiler.hover$$anonfun$1(ScalaPresentationCompiler.scala:389)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator
