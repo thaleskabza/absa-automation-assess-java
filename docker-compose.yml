@@ -1,38 +1,95 @@
-
 services:
-  selenium-hub-F:
+  selenium-hub:
     image: selenium/hub:4.8.0
-    container_name: selenium-hub-F
+    container_name: selenium-hub
     networks:
       - mynetwork
     ports:
       - "4444:4444"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  chrome:
+  chrome-1:
     image: selenium/node-chrome:4.8.0
     depends_on:
-      - selenium-hub-F
+      selenium-hub:
+        condition: service_healthy
     networks:
       - mynetwork
     environment:
-      - SE_EVENT_BUS_HOST=selenium-hub-F
+      - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_SESSION_TIMEOUT=300
+      - SE_VNC_NO_PASSWORD=1
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1080
+    shm_size: '2gb'
+    volumes:
+      - /dev/shm:/dev/shm
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
 
-  firefox:
+  chrome-2:
+    image: selenium/node-chrome:4.8.0
+    depends_on:
+      selenium-hub:
+        condition: service_healthy
+    networks:
+      - mynetwork
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_SESSION_TIMEOUT=300
+      - SE_VNC_NO_PASSWORD=1
+    shm_size: '2gb'
+    volumes:
+      - /dev/shm:/dev/shm
+
+  firefox-1:
     image: selenium/node-firefox:4.8.0
     depends_on:
-      - selenium-hub-F
+      selenium-hub:
+        condition: service_healthy
     networks:
       - mynetwork
     environment:
-      - SE_EVENT_BUS_HOST=selenium-hub-F
+      - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    shm_size: '2gb'
+
+  firefox-2:
+    image: selenium/node-firefox:4.8.0
+    depends_on:
+      selenium-hub:
+        condition: service_healthy
+    networks:
+      - mynetwork
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    shm_size: '2gb'
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-A
+    container_name: mysql-B
     restart: always
     networks:
       - mynetwork
@@ -42,25 +99,29 @@ services:
       MYSQL_USER: testuser
       MYSQL_PASSWORD: testpwd
     ports:
-      - "3307:3307"
+      - "3308:3308"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   test-runner:
     build:
       context: .
       dockerfile: Dockerfile
-    image: absa-assess-java
+    image: my-test-automation
     networks:
       - mynetwork
     environment:
-      SELENIUM_HUB_URL: "http://selenium-hub-F:4444/wd/hub"
-      DB_URL: "jdbc:mysql://mysql:3307/testdb"
+      SELENIUM_HUB_URL: "http://selenium-hub:4444/wd/hub"
+      DB_URL: "jdbc:mysql://mysql:3306/testdb"
       DB_USER: "testuser"
       DB_PASSWORD: "testpwd"
     depends_on:
-      - selenium-hub-F
+      - selenium-hub
       - mysql
     volumes:
-      - ./target/screenshots:/app/target/screenshots
+      - ./src/test/java/screenshots:/app/src/test/java/screenshots
 
 networks:
   mynetwork:
